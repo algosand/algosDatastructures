@@ -1,3 +1,4 @@
+#include "../libraries/lib.h"
 // I couldn't get this to work unfortunately.
 template <class T>
 class DSU

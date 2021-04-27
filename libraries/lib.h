@@ -91,6 +91,26 @@ void printMap(T mp)
     cout << "}" << endl;
 }
 
+// template <class T>
+// void printMapVec(T )
+
+template <class T>
+void printMapSet(T mp)
+{
+    cout << "{";
+    for (auto v : mp)
+    {
+        cout << "[" << v.first << ":";
+        for (auto u : v.second)
+        {
+            cout << u << ",";
+        }
+        cout << "],";
+    }
+    cout << "}" << endl;
+}
+
+// Printing out a set in nice format.
 template <class T>
 void printSet(T st)
 {
@@ -186,4 +206,65 @@ void printMapPair(unordered_map<pair<T1, T2>, pair<T1, T2>, hash_pair> mp)
         cout << "{" << p.first.first << "," << p.first.second << ": " << p.second.first << "," << p.second.second << "},";
     }
     cout << "}" << endl;
+}
+
+template <class T1, class T2>
+void printPQ(priority_queue<pair<T1, T2>> &pq)
+{
+    T1 x;
+    T2 y;
+    while (!pq.empty())
+    {
+        tie(x, y) = pq.top();
+        printf("x=%d,y=%s\n", x, y);
+        pq.pop();
+    }
+}
+
+// Prints vector of pairs
+template <class T1, class T2>
+void printPairVec(vector<pair<T1, T2>> &p)
+{
+    cout << "[";
+    for (auto &[x, y] : p)
+    {
+        cout << "(" << x << "," << y << "),";
+    }
+    cout << "]" << endl;
+}
+
+int column(vector<vector<int>> &matrix, vector<vector<int>> &target, int n, int j)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (matrix[i][j] != target[i][j])
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+int solve(vector<vector<int>> &matrix, vector<vector<int>> &target)
+{
+    int n, m, cnt = 0;
+    n = matrix.size();
+    m = matrix[0].size();
+    sort(matrix.begin(), matrix.end());
+    sort(target.begin(), target.end());
+
+    for (int j = 0; j < m; j++)
+    {
+        if (column(matrix, target, n, j))
+        {
+            cnt++;
+            for (int i = 0; i < n; i++)
+                matrix[i][j] ^= 1;
+        }
+        sort(matrix.begin(), matrix.end());
+        if (column(matrix, target, n, j))
+        {
+            return -1;
+        }
+    }
+    return cnt;
 }
