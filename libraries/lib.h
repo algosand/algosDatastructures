@@ -46,6 +46,7 @@ ll mod(ll a, ll b)
     return (a % b + b) % b;
 }
 
+// Printing vectors vvvvvvvvvvvvv
 template <class T>
 void printVec(vector<T> vec)
 {
@@ -71,6 +72,29 @@ void print2DVec(vector<vector<T>> &M)
     }
     cout << "]" << endl;
 }
+
+template <class T>
+void print3DVec(vector<vector<vector<T>>> &vec)
+{
+    cout << '[';
+    for (auto ve : vec)
+    {
+        cout << '[';
+        for (auto v : ve)
+        {
+            cout << '[';
+            for (auto &val : v)
+            {
+                cout << val << ',';
+            }
+            cout << ']' << endl;
+            ;
+        }
+        cout << ']' << endl;
+    }
+    cout << ']' << endl;
+}
+// Printing vectors ^^^^^^^^^^^
 void printArray(int arr[], int n)
 {
     cout << "[";
@@ -233,6 +257,12 @@ void printPairVec(vector<pair<T1, T2>> &p)
     cout << "]" << endl;
 }
 
+template <class T>
+void output(int t, T out)
+{
+    cout << "Case #" << t << ": " << out << endl;
+}
+
 int column(vector<vector<int>> &matrix, vector<vector<int>> &target, int n, int j)
 {
     for (int i = 0; i < n; i++)
@@ -267,4 +297,19 @@ int solve(vector<vector<int>> &matrix, vector<vector<int>> &target)
         }
     }
     return cnt;
+}
+
+const string IMPOSSIBLE = "IMPOSSIBLE";
+
+// Algorithms
+
+// Euclidean algorithm to compute greatest common denominator
+template <class T>
+T gcd(T a, T b)
+{
+    if (b == 0)
+    {
+        return a;
+    }
+    return gcd(b, a % b);
 }
