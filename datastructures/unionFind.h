@@ -78,3 +78,11 @@ struct UnionFind2 {
         return false;
     }
 };
+
+// Union find trick for when you are in 2-Dimensions, a method to represent it as a single integer for the union us this
+int getId(int row, int col, int ncols) {
+    return row*ncols+col;
+}
+
+// Union find in 3-dimensions?
+
