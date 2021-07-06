@@ -5,6 +5,10 @@ using namespace std;
 struct P {
     long long x, y;
 };
+
+P operator+(const P& a, const P& b) {
+    return P{a.x+b.x, a.y+b.y};
+}
 // subtraction to return a new 2-dimensional object
 P operator- (const P &a, const P &b) {
     return P{b.x-a.x,b.y-a.y};
