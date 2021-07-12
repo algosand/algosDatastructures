@@ -1,5 +1,7 @@
 #include "../libraries/lib.h"
-
+/*
+I don't know if this fenwick tree still works. 
+*/
 struct Fenwick {
     vector<int> bit;
     int size;

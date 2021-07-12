@@ -1,8 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
+const int NEUTRAL = 0;
+/*
+Segment tree for finding range sums in 1D array
+Note for future, segment tree can be used for more than just what is thought.
 
-// Segment tree data structure 
-struct Segtree {
+It can be used as a decision tree to find say the number of empty spots in front of an item. 
+and you can mark 0 as empty and 1 as not empty.  then you can binary search if you need 4 empty spots in front of a person
+for that number.  
+*/
+struct SegTree {
     int size;
     vector<int> tree;
     void init(int n) {
@@ -10,40 +17,42 @@ struct Segtree {
         while (size<n) {
             size*=2;
         }
-        tree.assign(2*size,0);
+        tree.assign(2*size,NEUTRAL);
     }
-    void update(int i, int val)
-    {
-        tree[base + i] = val;
-        for (int x = base + i >> 1; x >= 1; x >>= 1)
-        {
-            tree[x] = tree[x << 1] + tree[(x << 1) ^ 1];
+    void update(int i, int v, int x, int lx, int rx) {
+        if (rx-lx==1) {
+            tree[x]=v; // value at leaf node
+            return;
         }
+        int m = lx+rx>>1;
+        if (i<m) {
+            update(i, v, 2*x+1,lx,m);
+        } else {
+            update(i,v,2*x+2,m,rx);
+        }
+        tree[x]=tree[2*x+1]+tree[2*x+2];
+    }
+    void update(int i, int v) {
+        update(i, v, 0, 0, size);
+    }
+    // [l,r) query, note it is exclusive of r
+    int query(int l, int r, int x, int lx, int rx) {
+        if (lx>=r || l>=rx) {
+            return NEUTRAL;
+        }
+        if (lx>=l && rx<=r) {
+            return tree[x];
+        }
+        int m = lx+rx>>1;
+        int sl = query(l,r,2*x+1,lx,m);
+        int sr = query(l,r,2*x+2,m,rx);
+        return sl+sr;
     }
 
-    long long int query(int r)
-    {
-        if (r < 0)
-        {
-            return 0;
-        }
-        long long int res = tree[base + r];
-        for (int x = base + r; x != 1; x >>= 1)
-        {
-            if ((x & 1) > 0)
-            {
-                res += tree[x - 1];
-            }
-        }
-        return res;
+    int query(int l, int r) {
+        return query(l,r,0,0,size);
     }
-
-    long long int range(int l, int r)
-    {
-        return query(r - 1) - query(l - 1);
-    }
-
-}
+};
 
 
 // Segment tree data structure with lazy propagation (Used when need to update a range rather than a single node)

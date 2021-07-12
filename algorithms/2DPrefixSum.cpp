@@ -24,3 +24,10 @@ int main() {
     }
     vector<vector<int>> prefix = 2DprefixSum(matrix);
 }
+
+/*
+Example of how to use the prefix on a bounding box
+*/
+int total(int row0, int col0, int row1, int col1) {
+    return prefix[row1+1][col1+1]-prefix[row1+1][col0]-prefix[row0][col1+1]+prefix[row0][col0];
+}

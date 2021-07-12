@@ -33,6 +33,9 @@ vector<int> rabinKarp(const string& s, const string& pat) {
         pows[i] = (pows[i-1]*p)%mod;
     }
     // precompute the hashes for the string
+    /*
+    hashes = [c0p^0, c0p^0+c1p^1, c0p^0+c1p^1+c2p^2, ...]
+    */
     vector<int> hashes(n+1, 0);
     for (int i = 0;i < n;i++) {
         hashes[i+1] = (hashes[i] + ((s[i]-'a'+1)*pows[i]))%mod;
@@ -49,6 +52,109 @@ vector<int> rabinKarp(const string& s, const string& pat) {
     }
     return matches;
 }
+/*
+A variant of rolling hash that is useful for binary searching and using rolling hash. such as find common substring amongst multiple strings
+The main difference is how you are computing the rolling hash, I don't precompute it because we can't
+just easily update the curHash and multiply it by the pows[i] to see if it equals. 
+We need to store rolling hashes at each iteration of binary search, with varying lengths, best way
+is to use this formula for updating curHash = (a0p^2+a1p^1+a2p^0 - a0p^2)*p+a4p^0
+Basically we are adding the next term, and remove the earliest term which has the maximum power we know 
+for the length of the characters.  and we need multiply by p to update it for the next polynomial hash. 
+This way you can store all polynomial hashes for some substring length, 
+Then I can iterate through all substring polynomial hashes of the next substring and see if it was already seen
+in an efficient manner.  
+*/
+
+auto check = [&](const int len) {
+    // Precompute the hashes
+    unordered_set<int> seen;
+    int curHash = 0;
+    for (int i = 0;i < n;i++) {
+        curHash = i<len ? (curHash + ((nums1[i]+1)*pows[len-i-1])%mod)%mod : (((curHash-((nums1[i-len]+1)*pows[len-1])%mod+mod)%mod)*pows[1])%mod + nums1[i]+1;
+        if (i>=len-1) {
+            seen.insert(curHash);
+        }
+    }
+    curHash = 0;
+    for (int i = 0;i < m;i++) {
+        curHash = i<len ? (curHash + ((nums2[i]+1)*pows[len-i-1])%mod)%mod : (((curHash-((nums2[i-len]+1)*pows[len-1])%mod+mod)%mod)*pows[1])%mod + nums2[i]+1;
+        if (i>=len-1 && seen.count(curHash)>0) {
+            return true;
+        }
+    }
+    return false;
+};
+
+
+/*
+Couple of ways to generate the polynomial hash equations
+hashes = [c0p^0, c0p^0+c1p^1, c0p^0+c1p^1+c2p^2, ...]
+
+if you take hashes[lhs]-hashes[rhs] = c1p^1+c2p^2 = hashes[3]-hashes[1], 
+so to check if a string matches with that you need to make sure to multiple
+any pattern hash by pows[1], cause if it only has two terms it may be 
+c1p^0+c2p^1, which is equal but need to multiple by p. 
+*/
+vector<int> hashes(n+1, 0);
+for (int i = 0;i < n;i++) {
+    hashes[i+1] = (hashes[i] + ((s[i]-'a'+1)*pows[i]))%mod;
+}
+
+/*
+hashes = [c0p^0, c0p^1+c1p^0, c0p^2+c1p^1+c2p^0,...]
+
+If you take hashes[lhs]-hashes[rhs]*pows[rhs-lhs] = hashes[3]-hashes[1]*pows[3-1]=c0p^2+c1p^1+c2p^0 - c0p^2 = c1p^1+c2p^0
+Which is the polynomial hash for that string, you can now compare this to another string to see if it matches
+*/
+vector<int> hashes(n+1,0);
+for (int i=0;i<n;i++) {
+    hashes[i+1]=(hashes[i]*pows[i]+(s[i]-'a'+1))%mod;
+}
+/*
+a0p^0+a1p^1+a2p^2 for len=3 prefix
+a0p^2 + a1p^1+a2^p2, which if it is aba and aba it works.  
+
+These are two opposite ways to generate a polynomial hash function
+
+one is to multiple all the previous by p
+or to add on and multiple by higher powers of p. 
+*/
 int main() {
     
 }
+
+class Solution {
+public:
+    int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
+        unordered_map<int,vector<pair<int,int>>> graph;
+        int n = passingFees.size();
+        for (auto edge : edges) {
+            int x = edge[0], y=edge[1], w=edge[2];
+            graph[x].push_back({y,w});
+            graph[y].push_back({x,w});
+        }
+        priority_queue<pair<int, pair<int, pair<int, unordered_set<int>>>>, vector<pair<int, pair<int, pair<int, unordered_set<int>>>>>, greater<pair<int, pair<int, pair<int, unordered_set<int>>>>>> pq;
+        pq.push({passingFees[0], {0, {0, {}}}});  // (cost, (time, (city, seen)))
+        int cost, time, city;
+        unordered_set<int> visited;
+        while (!pq.empty()) {
+            auto event = pq.top();
+            cost = event.first, time = event.second.first, city = event.second.second.first;
+            visited = event.second.second.second;
+            // printf("cost=%d, time=%d, city=%d\n", cost, time, city);
+            pq.pop();
+            if (city==n-1) {
+                return cost;
+            }
+            visited.insert(city);
+            for (auto &[nei, w] : graph[city]) {
+                int ntime = time + w, ncost = cost + passingFees[nei];
+                if (ntime<=maxTime && visited.count(nei)==0) {
+                    // printf("node=%d, nei=%d\n", city, nei);
+                    pq.push({ncost, ntime, nei, visited});
+                }
+            }
+        }
+        return -1;
+    }
+};
