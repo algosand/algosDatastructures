@@ -30,3 +30,16 @@ int main() {
     cin>>x;
     cout<<inverse(x,mod)<<endl;
 }
+
+/*
+Tutorial on how to use this in code.  
+
+Let's say you are using a mod, 
+
+if you need to compute a/b mod m
+you can compute that by doing the following
+(a*inverse(b,m))%m
+
+This is the way to compute the modulus for division, you can just perform modulus on numerator
+and denominator.  
+*/
