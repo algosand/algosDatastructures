@@ -1,51 +1,41 @@
 #include <bits/stdc++.h>
 using namespace std;
 // A general UnionFind datastructure template
-template <class T>
-class UnionFind
-{
-public:
-    unordered_map<T, T> parent;
-    unordered_map<T, int> size;
+
+struct UnionFind {
+    vector<int> parent, sizes;
     void init() {
-        parent.clear();
-        size.clear();
+        parent.resize(n);
+        iota(parent.begin(),parent.end(),0);
+        sizes.assign(n,1);
     }
 
-    T ufind(T u)
+    int find(int i)
     {
-        if (parent.count(u) == 0)
-        {
-            return parent[u] = u;
+        if (i==parent[i]) {
+            return i;
         }
-        if (parent[u] == u)
-        {
-            return u;
-        }
-        return parent[u] = ufind(parent[u]);
+        return parent[i]=find(parent[i]);
     }
 
-    bool uunion(T u, T v)
+    bool uunion(int i, int j)
     {
-        u = ufind(u);
-        v = ufind(v);
-        if (u != v)
-        {
-            if (size[u] < size[v])
-            {
-                swap(u, v);
+        i = find(i), j=find(j);
+        if (i!=j) {
+            if (sizes[j]>sizes[i]) {
+                swap(i,j);
             }
-            parent[v] = u;
-            size[u] += size[v];
-            return false;
+            parent[j]=i;
+            sizes[i]+=sizes[j];
+            return true;
         }
-        return true;
+        return false;
     }
 
     // checking if something is connected is to find the parents. 
-    bool isConnected(T s, T e)
+    bool isConnected(int s, int e)
     {
-        return ufind(s) == ufind(e);
+        return find(s) == find(e);
     }
 };
 
