@@ -4,7 +4,7 @@ using namespace std;
 
 struct UnionFind {
     vector<int> parent, sizes;
-    void init() {
+    void init(int n) {
         parent.resize(n);
         iota(parent.begin(),parent.end(),0);
         sizes.assign(n,1);
@@ -36,36 +36,6 @@ struct UnionFind {
     bool isConnected(int s, int e)
     {
         return find(s) == find(e);
-    }
-};
-
-// Another template for UnionFind where you can use vectors that store the index of unique nodes or index to a point.
-struct UnionFind2 {
-    vector<int> parents, size;
-    void init(int n) {
-        parents.resize(n);
-        iota(parents.begin(),parents.end(),0);
-        size.assign(n,0);
-    }
-
-    int ufind(int i) {
-        if (i==parents[i]) {
-            return i;
-        }
-        return parents[i]=ufind(parents[i]);
-    }
-
-    bool uunion(int i, int j) {
-        int ii = ufind(i), jj = ufind(j);
-        if (ii!=jj) {
-            if (size[jj]>size[ii]) {
-                swap(ii,jj);
-            }
-            size[ii]+=size[jj];
-            parents[jj]=ii;
-            return true;
-        }
-        return false;
     }
 };
 

@@ -66,3 +66,53 @@ struct Trie {
         return res;
     }
 };
+
+/*
+Trie datastructure for adding and searching for prefixes with English lowercase alphabet. So this is for words.  
+Also stores the value for each node as required by the problem it solved. 
+*/
+
+
+struct Node {
+    int val; 
+    int children[26]; // 26 lowercase letters in English alphabet
+    void init() { 
+        val = 0; // Initial value of any node in the trie datastructure
+        memset(children, -1, sizeof(children)); // stores the value for each lowercase letter, all are 0 initially
+    }
+};
+
+struct Trie {
+    vector<Node> trie;
+    void init() {
+        Node root;
+        root.init();
+        trie.push_back(root);
+    }
+    // 0<=x<=25
+    void add(string& s, int val) {
+        int cur = 0; // root node of the trie datastructure. 
+        for (char& c : s) {
+            int x = c-'a';
+            if (trie[cur].children[x]==-1) {
+                trie[cur].children[x]=trie.size();
+                Node root;
+                root.init();
+                trie.push_back(root);
+            }
+            cur=trie[cur].children[x]; // continue to the index of it's children. 
+            trie[cur].val += val; // update the value for this trie node. 
+        }
+    }
+    int search(string& pre) {
+        int cur = 0;
+        for (char& c : pre) {
+            int x = c-'a';
+            if (trie[cur].children[x]==-1) {
+                return 0;
+            }
+            cur = trie[cur].children[x];
+        }
+        return trie[cur].val;
+    }
+};
