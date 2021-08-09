@@ -10,6 +10,8 @@ of smallest numbers, if you have a smaller number you can place it on top of the
 This is just pseudocode to show, it is missing some components. 
 
 Allows to solve LIS problem in O(nlogn) time. 
+
+Use upper_bound if you are looking for longest non-decreasing subsequence
 */
 
 int patience(vector<int>& A) {
