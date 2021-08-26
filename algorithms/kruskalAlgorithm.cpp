@@ -28,13 +28,13 @@ struct UnionFind {
     }
 
     bool uunion(int i, int j) {
-        int ii = ufind(i), jj = ufind(j);
-        if (ii!=jj) {
-            if (size[jj]>size[ii]) {
-                swap(ii,jj);
+        i = ufind(i), j = ufind(j);
+        if (i!=j) {
+            if (size[j]>size[i]) {
+                swap(i,j);
             }
-            size[ii]+=size[jj];
-            parents[jj]=ii;
+            size[i]+=size[j];
+            parents[j]=i;
             return true;
         }
         return false;

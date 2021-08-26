@@ -116,3 +116,51 @@ struct Trie {
         return trie[cur].val;
     }
 };
+
+
+/*
+A more basic trie data structure that works for finding the max xor of two integers.
+*/
+
+struct Node {
+    int children[2];
+    void init() {
+        children[0]=children[1]=-1;
+    }
+};
+
+struct Trie {
+    vector<Node> trie;
+    void init() {
+        Node root;
+        root.init();
+        trie.push_back(root);
+    }
+    void add(int x) {
+        int cur = 0;
+        for (int i = 31;i>=0;i--) {
+            int c = (x>>i)&1; // check if ith bit is set to a 1.
+            if (trie[cur].children[c]==-1) {
+                trie[cur].children[c]=trie.size();
+                Node root;
+                root.init();
+                trie.push_back(root);
+            }
+            cur = trie[cur].children[c];
+        }
+    }
+
+    int search(int x) { //find best xor in trie with numbers in trie and current number x
+        int cur = 0, res = 0;
+        for (int i = 31;i>=0;i--) {
+            int c = (x>>i)&1;  
+            if (trie[cur].children[c^1]!=-1) {
+                res += (1<<i);
+                cur = trie[cur].children[c^1];
+            } else {
+                cur = trie[cur].children[c];
+            }
+        }
+        return res;
+    }
+};
