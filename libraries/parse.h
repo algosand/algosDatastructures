@@ -11,3 +11,18 @@ vector<string> getTokenArray(string &s) {
     vector<string> tokens(begin,end);
     return tokens;
 }  
+
+/*
+A method to create an array of strings from a string with a specific delimiter, this one
+uses delimiter = ',';
+*/
+vector<string> getArray(string &preorder) {
+    vector<string> nodes;
+    stringstream ss(preorder);
+    const char delimiter = ',';
+    string tmp;
+    while (getline(ss, tmp, delimiter)) {
+        nodes.push_back(tmp);
+    }
+}
+
