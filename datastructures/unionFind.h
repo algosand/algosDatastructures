@@ -45,4 +45,3 @@ int getId(int row, int col, int ncols) {
 }
 
 // Union find in 3-dimensions?
-
