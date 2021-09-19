@@ -3,7 +3,6 @@ using namespace std;
 /*
 General example of an unbounded knapsack problem.  
 
-
 This is a problem where you have a list of items that have weights and values.  We need to fill 
 up the entire knapsack with the items.  We can arrange them in a way that the sum(weights)=capacity.
 But you have an infinite supply of every item.  
