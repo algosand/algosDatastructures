@@ -34,6 +34,49 @@ int dijkstra(vector<vector<int>>& matrix) {
     }
     return dist[R-1][C-1];
 }
-int main() {
 
+/*
+Example of dijkstra problem for finding the shortest path from a single source to a single destination node.
+This time we create a graph that consists of all edges with weight 1.  This is to signify that between s[i:j] 
+there is a palindrome.  This way we can find the shortest path through the string while minimizing
+the number of palindromic substrings we can split it, in order to get to the last index. 
+
+It is much easier to understand this solution by drawing out the graph in my opinion. 
+*/
+
+const int INF  = 1e7;
+int solve(string s) {
+    int n = s.size();
+    unordered_map<int, vector<int>> palin;
+    palin[0].push_back(1);
+    auto expand = [&](int i, int j) {
+        while (i>=0 && j<n && s[i]==s[j]) {
+            palin[i].push_back(j+1);
+            i--;
+            j++;
+        }
+    };
+    for (int i = 1;i<n;i++) {
+        expand(i,i);
+        expand(i-1,i);
+    }
+    vector<int> dist(n+1,INF);
+    dist[0]=0;
+    priority_queue<pair<int,int>,vector<pair<int,int>>, greater<pair<int,int>>> q;  // min heap
+    q.emplace(0,0);
+    while (!q.empty()) {
+        int i, d;
+        tie(d,i) = q.top();
+        if (i==n) {
+            return d;
+        }
+        q.pop();
+        for (int j : palin[i]) {
+            if (d+1<dist[j]) {
+                q.emplace(d+1,j);
+                dist[j]=d+1;
+            }
+        }
+    }
+    return -1;
 }
