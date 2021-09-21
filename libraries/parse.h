@@ -13,16 +13,41 @@ vector<string> getTokenArray(string &s) {
 }  
 
 /*
+A more general version of the function above. 
 A method to create an array of strings from a string with a specific delimiter, this one
-uses delimiter = ',';
+uses delimiter delim
 */
-vector<string> getArray(string &preorder) {
-    vector<string> nodes;
-    stringstream ss(preorder);
-    const char delimiter = ',';
-    string tmp;
-    while (getline(ss, tmp, delimiter)) {
-        nodes.push_back(tmp);
-    }
+vector<string> getArray(string &str, char delim) {
+  vector<string> nodes;
+  stringstream ss(str);
+  string tmp;
+  while (getline(ss, tmp, delim)) {
+    nodes.push_back(tmp);
+  }
+  return nodes;
 }
 
+/*
+This is return a vector of ints
+*/
+vector<int> getArray(string &str, char delim) {
+  vector<int> nodes;
+  stringstream ss(str);
+  string tmp;
+  while (getline(ss, tmp, delim)) {
+    nodes.push_back(stoi(tmp));
+  }
+  return nodes;
+}
+/*
+This is returning a vector of char. 
+*/
+vector<char> getArrayChar(string &str, char delim) {
+  vector<char> nodes;
+  int n = str.size();
+  for (int i = 0;i<n;i++) {
+    if (str[i]==delim) {continue;}
+    nodes.push_back(str[i]);
+  }
+  return nodes;
+}
