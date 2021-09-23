@@ -43,6 +43,26 @@ vector<int> majorityVote(vector<int>& nums) {
     sort(ans.begin(),ans.end());
     return ans;
 }
-int main() {
 
+/*
+Implementation of majority report using accumulate in c++ for n/2
+
+*/
+int solve(vector<int>& nums) {
+    int x, cx = 0, n = nums.size();
+    for (int num : nums) {
+        if (cx==0 || x==num) {
+            swap(x,num);
+            cx++;
+        } else {
+            cx--;
+        }
+    }
+    cx = accumulate(nums.begin(),nums.end(), 0, [&](int a, int &b) {
+        return a + (b==x);
+    });
+    if (cx>n/2) {
+        return x;
+    }
+    return -1;
 }
