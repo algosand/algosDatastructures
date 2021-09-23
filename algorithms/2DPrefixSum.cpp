@@ -36,26 +36,30 @@ int total(int row0, int col0, int row1, int col1) {
 This is a good implementation of a 2d prefix sum problem being used.  
 
 */
-void setmax(int &a, int b) {
-    a = max(a,b);
-}
 int solve(vector<vector<int>>& matrix, int target) {
-    int R = matrix.size(), C = matrix[0].size(), ans = 0;
+    int R = matrix.size(), C = matrix[0].size(), lo = 0, hi = min(R,C)+1;
     vector<vector<int>> prefix(R+1, vector<int>(C+1,0));
     for (int i = 0;i<R;i++) {
         for (int j = 0;j<C;j++) {
             prefix[i+1][j+1] = prefix[i][j+1]+prefix[i+1][j]-prefix[i][j]+matrix[i][j];
         }
     }
-    for (int i = 1;i<=R;i++) {
-        for (int j = 1;j<=C;j++) {
-            for (int k = 0;k<=min(R-i,C-j);k++) {
-                int sum = prefix[i+k][j+k]-prefix[i+k][j-1]-prefix[i-1][j+k]+prefix[i-1][j-1];
-                if (sum<=target) {
-                    setmax(ans,(k+1)*(k+1));
-                }
+    auto isValid = [&](const int k) {
+        for (int i = k;i<=R;i++) {
+            for (int j = k;j<=C;j++) {
+                int sum = prefix[i][j] -prefix[i][j-k] - prefix[i-k][j]+prefix[i-k][j-k];
+                if (sum<=target) {return true;}
             }
         }
+        return false;
+    };
+    while (lo<hi) {
+        int mid = lo+hi+1>>1;
+        if (isValid(mid)) {
+            lo = mid;
+        } else {
+            hi = mid-1;
+        }
     }
-    return ans;
+    return lo*lo;
 }
