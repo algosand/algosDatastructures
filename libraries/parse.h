@@ -22,6 +22,7 @@ vector<string> getArray(string &str, char delim) {
   stringstream ss(str);
   string tmp;
   while (getline(ss, tmp, delim)) {
+    if (tmp.empty()) {continue;}
     nodes.push_back(tmp);
   }
   return nodes;
@@ -35,6 +36,7 @@ vector<int> getArray(string &str, char delim) {
   stringstream ss(str);
   string tmp;
   while (getline(ss, tmp, delim)) {
+    if (tmp.empty()) {continue;}
     nodes.push_back(stoi(tmp));
   }
   return nodes;
@@ -51,3 +53,9 @@ vector<char> getArrayChar(string &str, char delim) {
   }
   return nodes;
 }
+
+
+/*
+I've been wondering what is a smart way to convert a string to a char in C++? 
+
+*/

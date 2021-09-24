@@ -1,8 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Often times the numbers will get too large and overflow in C++, so we need to mod it. 
-int mod = 1e9 + 7;
+// Often times the numbers will get too large and overflow in C++, so we need to MOD it. 
+int MOD = 1e9 + 7;
 struct Matrix {
     int numRows, numCols;
     vector<vector<int>> M;
@@ -48,7 +48,7 @@ struct Matrix {
             for (int j = 0;j < CB;j++) {
                 int sum = 0;
                 for (int k = 0;k < RB;k++) {
-                    sum = (sum + ((long long)M[i][k]*B.M[k][j])%mod)%mod;
+                    sum = (sum + ((long long)M[i][k]*B.M[k][j])%MOD)%MOD;
                 }
                 result[i][j] = sum;
             }
@@ -88,7 +88,7 @@ Matrix operator*(const Matrix& A, const Matrix& B) {
         for (int j = 0; j < CB; j++) {
             int sum = 0;
             for (int k = 0;k < RB;k++) {
-                sum = (sum+((long long)A.M[i][k]*B.M[k][j])%mod)%mod;
+                sum = (sum+((long long)A.M[i][k]*B.M[k][j])%MOD)%MOD;
             }
             result.M[i][j]=sum;
         }
@@ -110,6 +110,16 @@ Matrix matrix_power(Matrix& A, int b) {
     return result;
 }
 
+/*
+A = TB
+
+How to derive the Transition and base matrix
+
+Create a matrix 
+
+
+*/
+
 int main() {
     // example of how to use matrix exponentiation
     // This will not really work as it doesn't have all the inputs.  
@@ -124,7 +134,7 @@ int main() {
     result.transpose();
     int sum = 0;
     for (int i = 0;i<5;i++) {
-        sum = (sum+result.M[0][i])%mod;
+        sum = (sum+result.M[0][i])%MOD;
     }
     return sum;
 }
