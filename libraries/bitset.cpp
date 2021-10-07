@@ -39,3 +39,33 @@ int maxLength(vector<string>& arr) {
     }
     return ans;
 }
+
+/*
+Concatenated String of Unique Count problem solved with bitsets and bitmasking
+Great example of how to use the bitset to basically create all possible intersections of the sets in
+an efficient manner for all combinations as long as no overlap. 
+*/
+
+int solve(vector<string>& words) {
+    vector<bitset<26>> concats(1);
+    for (string &word : words) {
+        unordered_set<char> wd(word.begin(), word.end());
+        if (word.size() == wd.size()) {
+            bitset<26> bs;
+            for (char &c : word) {
+                bs.set(c-'a');
+            }
+            int sz = concats.size();
+            for (int i = 0;i<sz;i++) {
+                if ((concats[i]&bs)==0) {
+                    concats.push_back(concats[i]|bs);
+                }
+            }
+        }
+    }
+    int ans = 0;
+    for (auto bs : concats) {
+        ans = max(ans, (int)bs.count());
+    }
+    return ans;
+}
