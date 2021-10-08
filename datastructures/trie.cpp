@@ -164,3 +164,65 @@ struct Trie {
         return res;
     }
 };
+
+/*
+Another trie node implementation that is for searching for lowercase words and prefixes.  
+The node includes an isWord to indicate if it is the end of a word at this node.  
+*/
+struct Node {
+    bool isWord;
+    int children[26];
+    void init() {
+        isWord = false;
+        memset(children, 0, sizeof(children));
+    }
+};
+class Trie {
+public:
+    vector<Node> trie;
+    Trie() {
+        trie.clear();
+        Node root;
+        root.init();
+        trie.push_back(root);
+    }
+    
+    void insert(string word) {
+        int cur = 0;
+        for (char &c : word) {
+            int x = c-'a';
+            if (!trie[cur].children[x]) {
+                trie[cur].children[x] = trie.size();
+                Node root;
+                root.init();
+                trie.push_back(root);
+            }
+            cur = trie[cur].children[x];
+        }
+        trie[cur].isWord=true;
+    }
+    
+    bool search(string word) {
+        int cur = 0;
+        for (char &c : word) {
+            int x = c-'a';
+            if (!trie[cur].children[x]) {
+                return false;
+            }
+            cur = trie[cur].children[x];
+        }
+        return trie[cur].isWord;
+    }
+    
+    bool startsWith(string prefix) {
+        int cur = 0;
+        for (char &c : prefix) {
+            int x = c-'a';
+            if (!trie[cur].children[x]) {
+                return false;
+            }
+            cur = trie[cur].children[x];
+        }
+        return true;
+    }
+};
