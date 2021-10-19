@@ -37,6 +37,15 @@ struct UnionFind {
     {
         return find(s) == find(e);
     }
+
+    // This will count the number of groups in the disjoint sets
+    int countGroups(int n ) {
+        int cnt = 0;
+        for (int i = 0;i<n;i++) {
+            cnt += (find(i)==i);
+        }
+        return cnt;
+    }
 };
 
 // Union find trick for when you are in 2-Dimensions, a method to represent it as a single integer for the union us this

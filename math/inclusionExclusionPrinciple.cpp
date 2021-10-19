@@ -8,4 +8,3 @@ It represents the way to find the number of elements in a union of two finite se
 |A union B| = |A| + |B| - |A intersect B|
 
 */
-
