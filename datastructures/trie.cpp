@@ -167,7 +167,9 @@ struct Trie {
 
 /*
 Another trie node implementation that is for searching for lowercase words and prefixes.  
-The node includes an isWord to indicate if it is the end of a word at this node.  
+The node includes an isWord to indicate if it is the end of a word at this node.
+
+Do not need to do init
 */
 struct Node {
     bool isWord;
