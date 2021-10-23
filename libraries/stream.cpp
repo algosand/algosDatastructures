@@ -19,3 +19,16 @@ bool areNumbersAscending(string s) {
     }
     return true;
 }
+
+/*
+Converts a string s and streams it into a token array. This is space delimited. 
+*/
+vector<string> getTokens(string s) {
+    vector<string> tokens;
+    istringstream ss(s);
+    string word;
+    while (ss >> word) {
+        tokens.push_back(word);
+    }
+    return tokens;
+}

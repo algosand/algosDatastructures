@@ -1,7 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 // A general UnionFind datastructure template
-
+const int INF = 1e9;
+vector<vector<int>> mines;
+int sideWidth;
 struct UnionFind {
     vector<int> parent, sizes;
     void init(int n) {
@@ -45,6 +47,20 @@ struct UnionFind {
             cnt += (find(i)==i);
         }
         return cnt;
+    }
+
+    // checks a disjoint set composed of circles extends across some width.
+    bool extends(int i) {
+        i = find(i);
+        int leftmost = INF, rightmost = -INF;
+        for (int j = 0;j<parent.size();j++) {
+            if (find(j)==i) {
+                int x = mines[j][0], y = mines[j][1], r = mines[j][2];
+                leftmost = min(leftmost, x-r);
+                rightmost = max(rightmost, x+r);
+            }
+        }
+        return leftmost<=0 && rightmost>=sideWidth;
     }
 };
 

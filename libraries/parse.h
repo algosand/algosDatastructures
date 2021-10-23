@@ -54,8 +54,6 @@ vector<char> getArrayChar(string &str, char delim) {
   return nodes;
 }
 
-
 /*
-I've been wondering what is a smart way to convert a string to a char in C++? 
 
 */

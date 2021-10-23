@@ -16,7 +16,3 @@ void fisherYates(vector<int>& nums) {
         swap(nums[i],nums[pos]);
     }
 }
-
-int main() {
-
-}
