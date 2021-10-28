@@ -158,3 +158,18 @@ public:
         return -1;
     }
 };
+
+/*
+Polynomial hash for integers, let's say you have a series of integers that can be between the value of -1e5 to 1e5, that means 
+you have 200,000 unique integers you need to hash, so I choose p = 200,003, the next prime number,
+and I want to check that I have three unique integers via a polynomial hash.  
+*/
+
+const int MOD = 1e9+7;
+const long long p = 2e5+3, offset = 1e5;
+int getHash(long long x, long long y, long long z) {
+    x+=offset;
+    y+=offset;
+    z+=offset;
+    return ((x*p)%MOD + ((y*p)%MOD*p)%MOD + (((z*p)%MOD*p)%MOD*p)%MOD)%MOD;
+}
