@@ -119,45 +119,6 @@ These are two opposite ways to generate a polynomial hash function
 one is to multiple all the previous by p
 or to add on and multiple by higher powers of p. 
 */
-int main() {
-    
-}
-
-class Solution {
-public:
-    int minCost(int maxTime, vector<vector<int>>& edges, vector<int>& passingFees) {
-        unordered_map<int,vector<pair<int,int>>> graph;
-        int n = passingFees.size();
-        for (auto edge : edges) {
-            int x = edge[0], y=edge[1], w=edge[2];
-            graph[x].push_back({y,w});
-            graph[y].push_back({x,w});
-        }
-        priority_queue<pair<int, pair<int, pair<int, unordered_set<int>>>>, vector<pair<int, pair<int, pair<int, unordered_set<int>>>>>, greater<pair<int, pair<int, pair<int, unordered_set<int>>>>>> pq;
-        pq.push({passingFees[0], {0, {0, {}}}});  // (cost, (time, (city, seen)))
-        int cost, time, city;
-        unordered_set<int> visited;
-        while (!pq.empty()) {
-            auto event = pq.top();
-            cost = event.first, time = event.second.first, city = event.second.second.first;
-            visited = event.second.second.second;
-            // printf("cost=%d, time=%d, city=%d\n", cost, time, city);
-            pq.pop();
-            if (city==n-1) {
-                return cost;
-            }
-            visited.insert(city);
-            for (auto &[nei, w] : graph[city]) {
-                int ntime = time + w, ncost = cost + passingFees[nei];
-                if (ntime<=maxTime && visited.count(nei)==0) {
-                    // printf("node=%d, nei=%d\n", city, nei);
-                    pq.push({ncost, ntime, nei, visited});
-                }
-            }
-        }
-        return -1;
-    }
-};
 
 /*
 Polynomial hash for integers, let's say you have a series of integers that can be between the value of -1e5 to 1e5, that means 
@@ -172,4 +133,71 @@ int getHash(long long x, long long y, long long z) {
     y+=offset;
     z+=offset;
     return ((x*p)%MOD + ((y*p)%MOD*p)%MOD + (((z*p)%MOD*p)%MOD*p)%MOD)%MOD;
+}
+
+/*
+This is a rolling hash solution to a problem of finding the longest duplicate substring.  It is a very good example of using a rolling hash
+algorithm. 
+
+A variant of rolling hash that is useful for binary searching and using rolling hash. such as find common substring amongst multiple strings
+The main difference is how you are computing the rolling hash, I don't precompute it because we can't
+just easily update the curHash and multiply it by the pows[i] to see if it equals. 
+We need to store rolling hashes at each iteration of binary search, with varying lengths, best way
+is to use this formula for updating curHash = (a0p^2+a1p^1+a2p^0 - a0p^2)*p+a4p^0
+
+Additional thoughts that are important is that there is a lot of substring combinations to try here.
+There are 2^n, so with this there is a higher chance of collision with the rolling hash.  The reason behind this collision is because
+there are two things you can say about a hash.  Suppose the hash = 22, now if this hash does exist in the map of seen hashes previously.  
+That indicates that this string does not exist, has not been processed prior.  That means it is not a duplicate.  
+Alternatively if the hash = 22 does exist in the map, that means the string could be a duplicate.  So to actually determine if it is a 
+duplicate you need to iterate through all previous strings that produce a duplicate by storing the starting index. and find if it actually is
+a duplicate.  
+
+But this algorithm is still almost (maybe that is amortized) O(nlogn), because the hash is good, there isn't going to be too many collisions.  With a poor hash it would be worse case O(n^2logn)
+*/
+const long long p = 31;
+const int MOD = 1e9+7;
+string longestDupSubstring(string s) {
+    int n = s.size();
+    int lo = 0, hi = n-1;
+    auto check = [&](const int len) {
+        string res = "";
+        if (len==0) {return res;}
+        unordered_map<int, vector<int>> seen;
+        int hash = 0;
+        vector<long long> pows(len,1);
+        for (int i = 1;i<len;i++) {
+            pows[i] = (pows[i-1]*p)%MOD;
+        }
+        for (int i = 0;i<len;i++) {
+            int coeff = s[i]-'a';
+            hash = ((hash*p)%MOD+coeff)%MOD;
+        }
+        seen[hash].push_back(0);
+        for (int i = len;i<n;i++) {
+            int aprev = s[i-len]-'a', acur = s[i]-'a';
+            hash = (hash - (aprev*pows.end()[-1])%MOD + MOD)%MOD;
+            hash = ((hash*p)%MOD + acur)%MOD;
+            if (seen.find(hash)!=seen.end()) {
+                string cand = s.substr(i-len+1,len);
+                for (auto &start : seen[hash]) {
+                    if (strcmp(s.substr(start,len).data(), cand.data())==0) {
+                        return cand;
+                    }
+                }
+            }
+            seen[hash].push_back(i-len+1);
+        }
+        return res;
+    };
+    while (lo<hi) {
+        int mid = lo+hi+1>>1;
+        string tmp = check(mid);
+        if (!tmp.empty()) {
+            lo = mid;
+        } else {
+            hi = mid-1;
+        }
+    }
+    return check(lo);
 }
