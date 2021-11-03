@@ -7,20 +7,18 @@ multiplicative inverse modulus computation by algorithms.
 */
 
 // binary exponentiation
-int mod = 1e9+7;
+const int MOD = 1e9+7;
 int power(long long a, int b) {
     long long result = 1;
     while (b>0) {
         if (b%2 == 1) {
-            result = (result*a)%mod;
+            result = (result*a)%MOD;
         }
-        a = (a*a)%mod;
+        a = (a*a)%MOD;
         b/=2;
     }
     return result;
 }
-
-// euler's theorem
 int inverse(int a, int b) {
     return power(a, b-2);
 }
