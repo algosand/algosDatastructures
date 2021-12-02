@@ -29,7 +29,8 @@ vector<string> getArray(string &str, char delim) {
 }
 
 /*
-This is return a vector of ints
+This returns a array datastructure using vectors in C++ to 
+convert an input string with some form of delimiter into and array datastructure
 */
 vector<int> getArray(string &str, char delim) {
   vector<int> nodes;

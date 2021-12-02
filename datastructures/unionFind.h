@@ -70,3 +70,33 @@ int getId(int row, int col, int ncols) {
 }
 
 // Union find in 3-dimensions?
+
+/*
+A potentially more efficient union find that uses array instead of vectors. 
+TODO: benchmark this one again the prior. 
+*/
+
+const int N = 1e5+2;
+int parent[N], sizes[N];
+struct UnionFind {
+    void init(int n) {
+        iota(parent,parent+n,0);
+        fill(sizes,sizes+n,1);
+    }
+    
+    int find(int i) {
+        if (i==parent[i]) {return i;}
+        return parent[i]=find(parent[i]);
+    }
+    
+    void uunion(int i, int j) {
+        i = find(i), j = find(j);
+        if (i!=j) {
+            if (sizes[j]>sizes[i]) {
+                swap(i,j);
+            }
+            parent[j]=i;
+            sizes[i]+=sizes[j];
+        }
+    }
+};

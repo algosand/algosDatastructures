@@ -3,7 +3,6 @@ using namespace std;
 /*
 The classic merge intervals algorithm that comes in handy often. 
 O(n) it uses a sliding window algorithm.  That just checks for overlap with the start and the previous end value.
-
 */
 void setmax(int &a, int b) {
     a = max(a,b);
@@ -25,3 +24,4 @@ vector<vector<int>> merge(vector<vector<int>>& intervals) {
 int main() {
 
 }
+

@@ -1,33 +1,42 @@
-#include <bits/stdc++.h>
-using namespace std;
-
-vector<int> solve(vector<int>& nums) {
-    sort(nums.begin(),nums.end(),[&](const auto a, const auto b) {
-        if (__builtin_popcount(a)!=__builtin_popcount(b)) {
-            return __builtin_popcount(a)<__builtin_popcount(b);
-        }
-        for (int i = 31;i>=0;i--) {
-            int bf = (b>>i)&1, af = (a>>i)&1;
-            if (bf && !af) {
-                return false;
-            } else if (af && !bf) {
-                return true;
-            }
-        }
-        return true;});
-    return nums;
+int findPosIdentifierVersion(string &str, char delim = ' ') {
+    int pos = str.find(delim);
+    return pos;
 }
 
-int main() {
-    freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
-    int n;
-    vector<int> arr;
-    cin>>n;
-    for (int i = 0;i<n;i++) {
-        int x;
-        cin>>x;
-        arr.push_back(x);
+// A box object that contains the identifier and version. 
+struct Box {
+    string id, version;
+    void init(string& identifier, string& ver) {
+        id = identifier;
+        version = ver;
     }
-    solve(arr);
+};
+vector<string> sortBoxes(vector<string> boxList) {
+    vector<Box> old, nnew;
+    for (string &box : boxList) {
+        int pos = findPosIdentifierVersion(box);
+        Box bo;
+        string identifier = box.substr(0,pos), ver = box.substr(pos+1);
+        bo.init(identifier, ver);
+        // if alphabet character in the version it is old generation
+        if (isalpha(bo.version[0])) {
+            old.push_back(bo); 
+        } else {
+            nnew.push_back(bo);
+        }
+    }
+    sort(old.begin(),old.end(), [](const auto& boxA, const auto& boxB) {
+        if (boxA.version!=boxB.version) {
+            return boxA.version<boxB.version;
+        }
+        return boxA.id < boxB.id;
+    });
+    vector<string> sortedBoxes;
+    for (auto& box : old) {
+        sortedBoxes.push_back(box.id + ' ' + box.version);
+    }
+    for (auto& box : nnew) {
+        sortedBoxes.push_back(box.id + ' ' + box.version);
+    }
+    return sortedBoxes;
 }

@@ -24,6 +24,7 @@ void primeSieve(vector<bool> &primes)
 /*
 This uses the prime sieve algorithm in order to find the smallest prime factor for every integer up to and 
 including n. 
+
 */
 vector<int> spf;
 void sieve(int n) {
@@ -45,12 +46,14 @@ unordered_set<int> getFactors(int n) {
     unordered_set<int> factors;
     while (n>1) {
         factors.insert(spf[n]);
-        n/=spf[n];
-    }
+        n/=spf[n];}
     return factors;
 }
 int main()
 {
+    /*
+    This is getting the number of prime factors up to N.
+    */
     auto start = chrono::high_resolution_clock::now();
     vector<bool> primes(N);
     primeSieve(primes);
@@ -63,4 +66,13 @@ int main()
         count += primes[i];
     }
     printf("count=%d\n", count);
+    /*
+    This code gets the factors for an integer.
+    */
+    // sieve(100000);
+    // unordered_set<int> factors = getFactors(88000);
+    // for (auto x : factors) {
+    //     cout << x << endl;
+    // }
+
 }

@@ -15,3 +15,9 @@ int euclideanDistance(pair<double, double>& c1, pair<double, double>& c2) {
 long long lcm(long long a, long long b) {
     return b/gcd(a,b)*a;
 }
+/*
+computes manhattan distance for pair<int,int> 
+*/
+int manhattanDistance(pair<int, int> &a, pair<int, int> &b) {
+    return abs(a.first - b.first) + abs(a.second - b.second);
+}
