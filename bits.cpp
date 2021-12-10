@@ -17,6 +17,10 @@ for (int i = 1;i<(1<<n);i++) {
     }
 }
 
+A trick to flip all the bits in a value like gamma is to use xor with all the 1s.  
+if gamma = 10100, then epsilon = 01011, beause 10100 ^ 11111 = 01011.
+epsilon = gamma ^ ((1<<n)-1)
+
 
 */
 

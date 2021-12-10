@@ -2,7 +2,7 @@
 using namespace std;
 
 // Often times the numbers will get too large and overflow in C++, so we need to MOD it. 
-int MOD = 1e9 + 7;
+const int MOD = 1e9 + 7;
 struct Matrix {
     int numRows, numCols;
     vector<vector<int>> M;
@@ -33,12 +33,15 @@ struct Matrix {
     }
     // Set's a pair of coordinates on the matrix with the specified value, works for a transition matrix
     // where you need ones in places. 
-    void set(vector<pair<int,int>> locs, int val) {
+    void set(vector<pair<int,int>>& locs, int val) {
         int r, c;
         for (auto loc : locs) {
             tie(r, c) = loc;
             M[r][c] = val;
         }
+    }
+    void setSingle(int r, int c, int val) {
+        M[r][c] = val;
     }
     // this matrix times another matrix. 
     void operator*=(const Matrix& B) {
@@ -68,12 +71,12 @@ struct Matrix {
         swap(numRows,numCols); // transpose swaps the rows and columns
         swap(M,matrix); // swap these two
     }
-
     // Method to convert a row and column to a unique integer that identifies a row, column combination
     // that can be used in hashing
     int getId(int row, int col) {
         return numRows*row+col;
     }
+
 };
 
 Matrix operator*(const Matrix& A, const Matrix& B) {
