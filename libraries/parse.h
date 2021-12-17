@@ -58,3 +58,17 @@ vector<char> getArrayChar(string &str, char delim) {
 /*
 
 */
+
+
+/*
+count leading tabs in a string
+*/
+int countTabs(string& str) {
+    int count = 0;
+    int n = str.size();
+    for (int i = 0;i<n;i++) {
+        if (str[i]!='\t') {break;}
+        count++;
+    }
+    return count;
+}
