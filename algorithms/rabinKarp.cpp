@@ -7,7 +7,7 @@ string matching algorithm
 In general will need to compute the window size of the pat and generate hash for
 all the substrings in the string to find if pat is in the text. 
 */
-int mod = 1e9 + 7;
+const int mod = 1e9+7;
 int getHash(const string& s, vector<long long>& pows) {
     int mod = 1e9 + 7, hashed = 0;
     long long p = 31;
