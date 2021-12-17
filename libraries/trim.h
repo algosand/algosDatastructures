@@ -19,11 +19,7 @@ Can do the same for right trim of character if necessary too.
 */
 
 static inline void ltrimChar(string& s, char& c) {
-    s.erase(s.begin(), find_if(s.begin(),s.end(), [](unsigned char ch) {
+    s.erase(s.begin(), find_if(s.begin(),s.end(), [&c](unsigned char ch) {
         return !(ch==c);
     }));
-}
-
-    rtrim(s);
-    ltrim(s);
 }
