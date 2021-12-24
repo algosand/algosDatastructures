@@ -12,7 +12,7 @@ and then j will look at all possible subsets of the current set.
 
 for (int i = 1;i<(1<<n);i++) {
     for (int j = i;j>0;j=((j-1)&i)) {
-        if (sum[j]>sessionTime) {continue;}
+        if (sum[j]>sessionTime) {czontinue;}
         dp[i]=min(dp[i],dp[i^j]+1);
     }
 }
